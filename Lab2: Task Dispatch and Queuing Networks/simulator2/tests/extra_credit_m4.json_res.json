@@ -1,0 +1,250 @@
+{
+	"distributions" : 
+	[
+		{
+			"name" : "Exp4.0",
+			"rate" : 4.0,
+			"type" : "DistributionExp"
+		},
+		{
+			"name" : "Exp5.0",
+			"rate" : 5.0,
+			"type" : "DistributionExp"
+		},
+		{
+			"name" : "Exp3.0",
+			"rate" : 3.0,
+			"type" : "DistributionExp"
+		},
+		{
+			"name" : "Exp6.0",
+			"rate" : 6.0,
+			"type" : "DistributionExp"
+		},
+		{
+			"name" : "Exp10.0",
+			"rate" : 10.0,
+			"type" : "DistributionExp"
+		},
+		{
+			"name" : "Det0",
+			"type" : "DistributionDet",
+			"val" : 0
+		}
+	],
+	"perfModels" : 
+	[
+		{
+			"dist" : "Exp4.0",
+			"name" : "PerfModelExp4.0",
+			"type" : "PerfModelDist"
+		},
+		{
+			"dist" : "Exp5.0",
+			"name" : "PerfModelExp5.0",
+			"type" : "PerfModelDist"
+		},
+		{
+			"dist" : "Exp6.0",
+			"name" : "PerfModelExp6.0",
+			"type" : "PerfModelDist"
+		},
+		{
+			"dist" : "Exp10.0",
+			"name" : "PerfModelExp10.0",
+			"type" : "PerfModelDist"
+		},
+		{
+			"dist" : "Exp3.0",
+			"name" : "PerfModelExp3.0",
+			"type" : "PerfModelDist"
+		}
+	],
+	"requestHandlers" : 
+	[
+		{
+			"name" : "Q1",
+			"perfModel" : "PerfModelExp5.0",
+			"type" : "RequestHandlerFifoQueue"
+		},
+		{
+			"name" : "Q3",
+			"perfModel" : "PerfModelExp4.0",
+			"type" : "RequestHandlerFifoQueue"
+		},
+		{
+			"name" : "Q4",
+			"perfModel" : "PerfModelExp6.0",
+			"type" : "RequestHandlerFifoQueue"
+		},
+		{
+			"name" : "Q2",
+			"perfModel" : "PerfModelExp5.0",
+			"type" : "RequestHandlerFifoQueue"
+		},
+		{
+			"initialTransitionProbability" : 
+			[
+				{
+					"probability" : 0.34000000000000002,
+					"queue" : "Q1"
+				},
+				{
+					"probability" : 0.33000000000000002,
+					"queue" : "Q3"
+				},
+				{
+					"probability" : 0.33000000000000002,
+					"queue" : "Q4"
+				}
+			],
+			"name" : "network",
+			"transitionProbabilities" : 
+			[
+				{
+					"queue" : "Q1",
+					"transitionProbability" : 
+					[
+						{
+							"probability" : 1.0,
+							"queue" : "Q2"
+						}
+					]
+				}
+			],
+			"type" : "RequestHandlerQueueingNetwork"
+		}
+	],
+	"requestStreams" : 
+	[
+		{
+			"MPL" : 20,
+			"name" : "workload",
+			"requestGeneratorConfig" : 
+			{
+				"dist" : "Det0",
+				"name" : "workloadRequestGenerator",
+				"type" : "RequestGeneratorDist"
+			},
+			"requestHandler" : "network",
+			"thinkTime" : "Det0",
+			"type" : "RequestStreamClosed"
+		}
+	],
+	"results" : 
+	{
+		"latency" : 
+		[
+			{
+				"E[T]" : 1.6840244680224543,
+				"t" : 0
+			},
+			{
+				"E[T]" : 1.6783199750728079,
+				"t" : 100000000000000
+			},
+			{
+				"E[T]" : 1.6827537875506169,
+				"t" : 200000000000000
+			},
+			{
+				"E[T]" : 1.6813969681607697,
+				"t" : 300000000000000
+			},
+			{
+				"E[T]" : 1.688806783819164,
+				"t" : 400000000000000
+			},
+			{
+				"E[T]" : 1.6836372883570523,
+				"t" : 500000000000000
+			},
+			{
+				"E[T]" : 1.6862702679219166,
+				"t" : 600000000000000
+			},
+			{
+				"E[T]" : 1.6914785642703014,
+				"t" : 700000000000000
+			},
+			{
+				"E[T]" : 1.6866554421720046,
+				"t" : 800000000000000
+			},
+			{
+				"E[T]" : 1.6829905358254582,
+				"t" : 900000000000000
+			}
+		],
+		"throughput" : 
+		[
+			{
+				"X" : 11.876189999999999,
+				"t" : 0
+			},
+			{
+				"X" : 11.916550000000001,
+				"t" : 100000000000000
+			},
+			{
+				"X" : 11.885339999999999,
+				"t" : 200000000000000
+			},
+			{
+				"X" : 11.894959999999999,
+				"t" : 300000000000000
+			},
+			{
+				"X" : 11.84272,
+				"t" : 400000000000000
+			},
+			{
+				"X" : 11.879020000000001,
+				"t" : 500000000000000
+			},
+			{
+				"X" : 11.860379999999999,
+				"t" : 600000000000000
+			},
+			{
+				"X" : 11.824020000000001,
+				"t" : 700000000000000
+			},
+			{
+				"X" : 11.85777,
+				"t" : 800000000000000
+			},
+			{
+				"X" : 11.88358,
+				"t" : 900000000000000
+			}
+		]
+	},
+	"seed" : 5489,
+	"stats" : 
+	[
+		{
+			"name" : "latency",
+			"outputIntervalNs" : 100000000000000,
+			"outputJson" : true,
+			"outputPrint" : false,
+			"targets" : 
+			[
+				"network"
+			],
+			"type" : "StatsLatency"
+		},
+		{
+			"name" : "throughput",
+			"outputIntervalNs" : 100000000000000,
+			"outputJson" : true,
+			"outputPrint" : true,
+			"targets" : 
+			[
+				"network"
+			],
+			"type" : "StatsThroughput"
+		}
+	],
+	"stopTime" : 1000000000000000
+}

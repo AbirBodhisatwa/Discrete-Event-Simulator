@@ -1,0 +1,160 @@
+{
+	"distributions" : 
+	[
+		{
+			"name" : "Det0",
+			"type" : "DistributionDet",
+			"val" : 0
+		},
+		{
+			"name" : "Det0.001",
+			"type" : "DistributionDet",
+			"val" : 0.001
+		}
+	],
+	"perfModels" : 
+	[
+		{
+			"dist" : "Det0",
+			"name" : "PerfModelDet0",
+			"type" : "PerfModelDist"
+		}
+	],
+	"requestHandlers" : 
+	[
+		{
+			"name" : "Q0",
+			"perfModel" : "PerfModelDet0",
+			"type" : "RequestHandlerFifoQueue"
+		},
+		{
+			"name" : "Q1",
+			"perfModel" : "PerfModelDet0",
+			"type" : "RequestHandlerFifoQueue"
+		},
+		{
+			"name" : "Q2",
+			"perfModel" : "PerfModelDet0",
+			"type" : "RequestHandlerFifoQueue"
+		},
+		{
+			"name" : "Q3",
+			"perfModel" : "PerfModelDet0",
+			"type" : "RequestHandlerFifoQueue"
+		},
+		{
+			"initialTransitionProbability" : 
+			[
+				{
+					"probability" : 1.0,
+					"queue" : "Q0"
+				}
+			],
+			"name" : "network",
+			"transitionProbabilities" : 
+			[
+				{
+					"queue" : "Q0",
+					"transitionProbability" : 
+					[
+						{
+							"probability" : 0.33333299999999999,
+							"queue" : "Q1"
+						},
+						{
+							"probability" : 0.16666700000000001,
+							"queue" : "Q2"
+						},
+						{
+							"probability" : 0.5,
+							"queue" : "Q3"
+						}
+					]
+				}
+			],
+			"type" : "RequestHandlerQueueingNetwork"
+		}
+	],
+	"requestStreams" : 
+	[
+		{
+			"arrivalProcessConfig" : 
+			{
+				"dist" : "Det0.001",
+				"name" : "workloadArrivalProcess",
+				"type" : "ArrivalProcessDist"
+			},
+			"name" : "workload",
+			"requestGeneratorConfig" : 
+			{
+				"dist" : "Det0",
+				"name" : "workloadRequestGenerator",
+				"type" : "RequestGeneratorDist"
+			},
+			"requestHandler" : "network",
+			"type" : "RequestStreamOpen"
+		}
+	],
+	"results" : 
+	{
+		"throughput1" : 
+		[
+			{
+				"X" : 333.5514,
+				"t" : 0
+			}
+		],
+		"throughput2" : 
+		[
+			{
+				"X" : 166.7285,
+				"t" : 0
+			}
+		],
+		"throughput3" : 
+		[
+			{
+				"X" : 499.72000000000003,
+				"t" : 0
+			}
+		]
+	},
+	"seed" : 5489,
+	"stats" : 
+	[
+		{
+			"name" : "throughput1",
+			"outputIntervalNs" : 10000000000000,
+			"outputJson" : true,
+			"outputPrint" : false,
+			"targets" : 
+			[
+				"Q1"
+			],
+			"type" : "StatsThroughput"
+		},
+		{
+			"name" : "throughput2",
+			"outputIntervalNs" : 10000000000000,
+			"outputJson" : true,
+			"outputPrint" : false,
+			"targets" : 
+			[
+				"Q2"
+			],
+			"type" : "StatsThroughput"
+		},
+		{
+			"name" : "throughput3",
+			"outputIntervalNs" : 10000000000000,
+			"outputJson" : true,
+			"outputPrint" : false,
+			"targets" : 
+			[
+				"Q3"
+			],
+			"type" : "StatsThroughput"
+		}
+	],
+	"stopTime" : 10000000000000
+}

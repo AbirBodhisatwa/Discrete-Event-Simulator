@@ -1,0 +1,61 @@
+{
+    "seed": 5489,
+    "stopTime": 100000000000000,
+    "stats": [
+        {
+            "name": "latency",
+            "type": "StatsLatency",
+            "outputJson": true,
+            "outputPrint": false,
+            "outputIntervalNs": 10000000000000,
+            "targets": [
+                "queue"
+            ]
+        },
+        {
+            "name": "throughput",
+            "type": "StatsThroughput",
+            "outputJson": true,
+            "outputPrint": true,
+            "outputIntervalNs": 10000000000000,
+            "targets": [
+                "queue"
+            ]
+        }
+    ],
+    "requestStreams": [
+        {
+            "name": "workload",
+            "type": "RequestStreamClosed",
+            "requestHandler":
+            {
+                "name": "queue",
+                "type": "RequestHandlerFifoQueue",
+                "perfModel":
+                {
+                    "name": "queuePerfModel",
+                    "type": "PerfModelServiceRate",
+                    "serviceRate": 3000000.0
+                }
+            },
+            "requestGeneratorConfig":
+            {
+                "name": "workloadRequestGenerator",
+                "type": "RequestGeneratorDist",
+                "dist":
+                {
+                    "name": "workloadRequestDist",
+                    "type": "DistributionExp",
+                    "rate": 0.000001
+                }
+            },
+            "thinkTime":
+            {
+                "name": "thinkTimeDist",
+                "type": "DistributionExp",
+                "rate": 1.0
+            },
+            "MPL": 9
+        }
+    ]
+}

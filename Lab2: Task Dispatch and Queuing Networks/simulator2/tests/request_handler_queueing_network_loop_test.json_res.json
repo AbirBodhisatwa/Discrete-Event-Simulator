@@ -1,0 +1,101 @@
+{
+	"distributions" : 
+	[
+		{
+			"name" : "Det0",
+			"type" : "DistributionDet",
+			"val" : 0
+		},
+		{
+			"name" : "Det0.001",
+			"type" : "DistributionDet",
+			"val" : 0.001
+		}
+	],
+	"perfModels" : 
+	[
+		{
+			"dist" : "Det0",
+			"name" : "PerfModelDet0",
+			"type" : "PerfModelDist"
+		}
+	],
+	"requestHandlers" : 
+	[
+		{
+			"name" : "Q1",
+			"perfModel" : "PerfModelDet0",
+			"type" : "RequestHandlerFifoQueue"
+		},
+		{
+			"initialTransitionProbability" : 
+			[
+				{
+					"probability" : 1.0,
+					"queue" : "Q1"
+				}
+			],
+			"name" : "network",
+			"transitionProbabilities" : 
+			[
+				{
+					"queue" : "Q1",
+					"transitionProbability" : 
+					[
+						{
+							"probability" : 0.75,
+							"queue" : "Q1"
+						}
+					]
+				}
+			],
+			"type" : "RequestHandlerQueueingNetwork"
+		}
+	],
+	"requestStreams" : 
+	[
+		{
+			"arrivalProcessConfig" : 
+			{
+				"dist" : "Det0.001",
+				"name" : "workloadArrivalProcess",
+				"type" : "ArrivalProcessDist"
+			},
+			"name" : "workload",
+			"requestGeneratorConfig" : 
+			{
+				"dist" : "Det0",
+				"name" : "workloadRequestGenerator",
+				"type" : "RequestGeneratorDist"
+			},
+			"requestHandler" : "network",
+			"type" : "RequestStreamOpen"
+		}
+	],
+	"results" : 
+	{
+		"throughput1" : 
+		[
+			{
+				"X" : 4000.7399,
+				"t" : 0
+			}
+		]
+	},
+	"seed" : 5489,
+	"stats" : 
+	[
+		{
+			"name" : "throughput1",
+			"outputIntervalNs" : 10000000000000,
+			"outputJson" : true,
+			"outputPrint" : false,
+			"targets" : 
+			[
+				"Q1"
+			],
+			"type" : "StatsThroughput"
+		}
+	],
+	"stopTime" : 10000000000000
+}

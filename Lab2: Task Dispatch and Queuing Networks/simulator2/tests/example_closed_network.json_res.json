@@ -1,0 +1,219 @@
+{
+	"distributions" : 
+	[
+		{
+			"name" : "Exp1.0",
+			"rate" : 1.0,
+			"type" : "DistributionExp"
+		},
+		{
+			"name" : "Exp0.2",
+			"rate" : 0.20000000000000001,
+			"type" : "DistributionExp"
+		},
+		{
+			"name" : "Det0",
+			"type" : "DistributionDet",
+			"val" : 0
+		}
+	],
+	"perfModels" : 
+	[
+		{
+			"dist" : "Exp1.0",
+			"name" : "PerfModelExp1.0",
+			"type" : "PerfModelDist"
+		}
+	],
+	"requestHandlers" : 
+	[
+		{
+			"name" : "Q1",
+			"perfModel" : "PerfModelExp1.0",
+			"type" : "RequestHandlerFifoQueue"
+		},
+		{
+			"name" : "Q2",
+			"perfModel" : "PerfModelExp1.0",
+			"type" : "RequestHandlerFifoQueue"
+		},
+		{
+			"initialTransitionProbability" : 
+			[
+				{
+					"probability" : 0.5,
+					"queue" : "Q1"
+				},
+				{
+					"probability" : 0.5,
+					"queue" : "Q2"
+				}
+			],
+			"name" : "network",
+			"transitionProbabilities" : 
+			[
+				{
+					"queue" : "Q1",
+					"transitionProbability" : 
+					[
+						{
+							"probability" : 0.5,
+							"queue" : "Q1"
+						},
+						{
+							"probability" : 0.25,
+							"queue" : "Q2"
+						}
+					]
+				},
+				{
+					"queue" : "Q2",
+					"transitionProbability" : 
+					[
+						{
+							"probability" : 0.25,
+							"queue" : "Q1"
+						},
+						{
+							"probability" : 0.5,
+							"queue" : "Q2"
+						}
+					]
+				}
+			],
+			"type" : "RequestHandlerQueueingNetwork"
+		}
+	],
+	"requestStreams" : 
+	[
+		{
+			"MPL" : 100,
+			"name" : "workload",
+			"requestGeneratorConfig" : 
+			{
+				"dist" : "Det0",
+				"name" : "workloadRequestGenerator",
+				"type" : "RequestGeneratorDist"
+			},
+			"requestHandler" : "network",
+			"thinkTime" : "Det0",
+			"type" : "RequestStreamClosed"
+		}
+	],
+	"results" : 
+	{
+		"latency" : 
+		[
+			{
+				"E[T]" : 202.2474613310811,
+				"t" : 0
+			},
+			{
+				"E[T]" : 200.72701536622262,
+				"t" : 100000000000000
+			},
+			{
+				"E[T]" : 202.38570508307657,
+				"t" : 200000000000000
+			},
+			{
+				"E[T]" : 204.44422439612217,
+				"t" : 300000000000000
+			},
+			{
+				"E[T]" : 200.2041511678041,
+				"t" : 400000000000000
+			},
+			{
+				"E[T]" : 202.66001740509691,
+				"t" : 500000000000000
+			},
+			{
+				"E[T]" : 201.36218217452549,
+				"t" : 600000000000000
+			},
+			{
+				"E[T]" : 202.04047515122568,
+				"t" : 700000000000000
+			},
+			{
+				"E[T]" : 201.42185548217122,
+				"t" : 800000000000000
+			},
+			{
+				"E[T]" : 200.16537499722807,
+				"t" : 900000000000000
+			}
+		],
+		"throughput" : 
+		[
+			{
+				"X" : 0.49364000000000002,
+				"t" : 0
+			},
+			{
+				"X" : 0.49796000000000001,
+				"t" : 100000000000000
+			},
+			{
+				"X" : 0.49403000000000002,
+				"t" : 200000000000000
+			},
+			{
+				"X" : 0.48943999999999999,
+				"t" : 300000000000000
+			},
+			{
+				"X" : 0.49917,
+				"t" : 400000000000000
+			},
+			{
+				"X" : 0.49359999999999998,
+				"t" : 500000000000000
+			},
+			{
+				"X" : 0.49669999999999997,
+				"t" : 600000000000000
+			},
+			{
+				"X" : 0.49492999999999998,
+				"t" : 700000000000000
+			},
+			{
+				"X" : 0.49648999999999999,
+				"t" : 800000000000000
+			},
+			{
+				"X" : 0.49941000000000002,
+				"t" : 900000000000000
+			}
+		]
+	},
+	"seed" : 5489,
+	"stats" : 
+	[
+		{
+			"name" : "latency",
+			"outputIntervalNs" : 100000000000000,
+			"outputJson" : true,
+			"outputPrint" : false,
+			"targets" : 
+			[
+				"network"
+			],
+			"type" : "StatsLatency"
+		},
+		{
+			"name" : "throughput",
+			"outputIntervalNs" : 100000000000000,
+			"outputJson" : true,
+			"outputPrint" : true,
+			"targets" : 
+			[
+				"network"
+			],
+			"type" : "StatsThroughput"
+		}
+	],
+	"stopTime" : 1000000000000000
+}

@@ -1,0 +1,125 @@
+{
+    "seed": 5489,
+    "stopTime": 10000000000000,
+    "stats": [
+        {
+            "name": "throughput1",
+            "type": "StatsThroughput",
+            "outputJson": true,
+            "outputPrint": false,
+            "outputIntervalNs": 10000000000000,
+            "targets": [
+                "Q1"
+            ]
+        },
+        {
+            "name": "throughput2",
+            "type": "StatsThroughput",
+            "outputJson": true,
+            "outputPrint": false,
+            "outputIntervalNs": 10000000000000,
+            "targets": [
+                "Q2"
+            ]
+        },
+        {
+            "name": "throughput3",
+            "type": "StatsThroughput",
+            "outputJson": true,
+            "outputPrint": false,
+            "outputIntervalNs": 10000000000000,
+            "targets": [
+                "Q3"
+            ]
+        }
+    ],
+    "distributions": [
+        {
+            "name": "Det0",
+            "type": "DistributionDet",
+            "val": 0
+        },
+        {
+            "name": "Det0.001",
+            "type": "DistributionDet",
+            "val": 0.001
+        }
+    ],
+    "perfModels": [
+        {
+            "name": "PerfModelDet0",
+            "type": "PerfModelDist",
+            "dist": "Det0"
+        }
+    ],
+    "requestHandlers": [
+        {
+            "name": "Q0",
+            "type": "RequestHandlerFifoQueue",
+            "perfModel": "PerfModelDet0"
+        },
+        {
+            "name": "Q1",
+            "type": "RequestHandlerFifoQueue",
+            "perfModel": "PerfModelDet0"
+        },
+        {
+            "name": "Q2",
+            "type": "RequestHandlerFifoQueue",
+            "perfModel": "PerfModelDet0"
+        },
+        {
+            "name": "Q3",
+            "type": "RequestHandlerFifoQueue",
+            "perfModel": "PerfModelDet0"
+        },
+        {
+            "name": "network",
+            "type": "RequestHandlerQueueingNetwork",
+            "initialTransitionProbability": [
+                {
+                    "queue": "Q0",
+                    "probability": 1.0
+                }
+            ],
+            "transitionProbabilities": [
+                {
+                    "queue": "Q0",
+                    "transitionProbability": [
+                        {
+                            "queue": "Q1",
+                            "probability": 0.333333
+                        },
+                        {
+                            "queue": "Q2",
+                            "probability": 0.166667
+                        },
+                        {
+                            "queue": "Q3",
+                            "probability": 0.5
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "requestStreams": [
+        {
+            "name": "workload",
+            "type": "RequestStreamOpen",
+            "requestHandler": "network",
+            "requestGeneratorConfig":
+            {
+                "name": "workloadRequestGenerator",
+                "type": "RequestGeneratorDist",
+                "dist": "Det0"
+            },
+            "arrivalProcessConfig":
+            {
+                "name": "workloadArrivalProcess",
+                "type": "ArrivalProcessDist",
+                "dist": "Det0.001"
+            }
+        }
+    ]
+}

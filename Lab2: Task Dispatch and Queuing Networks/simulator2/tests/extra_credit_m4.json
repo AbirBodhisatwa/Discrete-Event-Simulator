@@ -1,0 +1,151 @@
+{
+    "seed": 5489,
+    "stopTime": 1000000000000000,
+    "stats": [
+        {
+            "name": "latency",
+            "type": "StatsLatency",
+            "outputJson": true,
+            "outputPrint": false,
+            "outputIntervalNs": 100000000000000,
+            "targets": [
+                "network"
+            ]
+        },
+        {
+            "name": "throughput",
+            "type": "StatsThroughput",
+            "outputJson": true,
+            "outputPrint": true,
+            "outputIntervalNs": 100000000000000,
+            "targets": [
+                "network"
+            ]
+        }
+    ],
+    "distributions": [
+        {
+            "name": "Exp4.0",
+            "type": "DistributionExp",
+            "rate": 4.0
+        },
+        {
+            "name": "Exp5.0",
+            "type": "DistributionExp",
+            "rate": 5.0
+        },
+        {
+            "name": "Exp3.0",
+            "type": "DistributionExp",
+            "rate": 3.0
+        },
+        {
+            "name": "Exp6.0",
+            "type": "DistributionExp",
+            "rate": 6.0
+        },
+        {
+            "name": "Exp10.0",
+            "type": "DistributionExp",
+            "rate": 10.0
+        },
+        {
+            "name": "Det0",
+            "type": "DistributionDet",
+            "val": 0
+        }
+    ],
+    "perfModels": [
+        {
+            "name": "PerfModelExp4.0",
+            "type": "PerfModelDist",
+            "dist": "Exp4.0"
+        },
+        {
+            "name": "PerfModelExp5.0",
+            "type": "PerfModelDist",
+            "dist": "Exp5.0"
+        },
+        {
+            "name": "PerfModelExp6.0",
+            "type": "PerfModelDist",
+            "dist": "Exp6.0"
+        },
+        {
+            "name": "PerfModelExp10.0",
+            "type": "PerfModelDist",
+            "dist": "Exp10.0"
+        },
+        {
+            "name": "PerfModelExp3.0",
+            "type": "PerfModelDist",
+            "dist": "Exp3.0"
+        }
+    ],
+    "requestHandlers": [
+        {
+            "name": "Q1",
+            "type": "RequestHandlerFifoQueue",
+            "perfModel": "PerfModelExp5.0"
+        },
+        {
+            "name": "Q3",
+            "type": "RequestHandlerFifoQueue",
+            "perfModel": "PerfModelExp4.0"
+        },
+        {
+            "name": "Q4",
+            "type": "RequestHandlerFifoQueue",
+            "perfModel": "PerfModelExp6.0"
+        },
+        {
+            "name": "Q2",
+            "type": "RequestHandlerFifoQueue",
+            "perfModel": "PerfModelExp5.0"
+        },
+        {
+            "name": "network",
+            "type": "RequestHandlerQueueingNetwork",
+            "initialTransitionProbability": [
+                {
+                    "queue": "Q1",
+                    "probability": 0.34
+                },
+                {
+                    "queue": "Q3",
+                    "probability": 0.33
+                },
+                {
+                    "queue": "Q4",
+                    "probability": 0.33
+                }
+            ],
+            "transitionProbabilities": [
+                {
+                    "queue": "Q1",
+                    "transitionProbability": [
+                        {
+                            "queue": "Q2",
+                            "probability": 1.0
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "requestStreams": [
+        {
+            "name": "workload",
+            "type": "RequestStreamClosed",
+            "requestHandler": "network",
+            "requestGeneratorConfig":
+            {
+                "name": "workloadRequestGenerator",
+                "type": "RequestGeneratorDist",
+                "dist": "Det0"
+            },
+            "thinkTime": "Det0",
+            "MPL": 20
+        }
+    ]
+}
